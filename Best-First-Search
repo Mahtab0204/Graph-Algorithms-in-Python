@@ -1,0 +1,45 @@
+import heapq
+
+def BestFirstSearch(graph, start, goal, h):
+    pq = [(h[start], start, [start])]  
+    visited = set()
+
+    while pq:
+        heuristic, node, path = heapq.heappop(pq)
+
+        if node == goal:
+            return path
+
+        if node in visited:
+            continue
+        visited.add(node)
+
+        for neighbor, cost in graph.get(node, []):
+            heapq.heappush(pq, (h[neighbor], neighbor, path + [neighbor]))
+
+
+Graph = {
+    'A': [('B',2),('C',3)],
+    'B': [('D',5),('E',1)],
+    'C': [('F',4)],
+    'D': [('H',2)],
+    'E': [('G',7)],
+    'F': [('G',9)],
+    'G': [('I',2)],
+    'H': [('I',6)],
+}
+
+h = {
+    'A': 10,
+    'B': 8,
+    'C': 7,
+    'D': 6,
+    'E': 5,
+    'F': 6,
+    'G': 3,
+    'H': 4,
+    'I': 0
+}
+
+path = BestFirstSearch(Graph, 'A', 'I', h)
+print("Best First Search Path:", path)
