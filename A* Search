@@ -1,0 +1,47 @@
+def Astar(graph, start, goal, h):
+    pq = [(h[start], 0, start, [start])]  
+
+    visited = set()
+
+    while pq:
+        f, cost, node, path = heapq.heappop(pq)
+
+        if node == goal:
+            return cost, path
+
+        if node in visited:
+            continue
+        visited.add(node)
+
+        for neighbor, newCost in graph.get(node, []):
+            g = cost + newCost
+            f = g + h[neighbor]
+            heapq.heappush(pq, (f, g, neighbor, path + [neighbor]))
+
+
+Graph = {
+    'A': [('B',2),('C',3)],
+    'B': [('D',5),('E',1)],
+    'C': [('F',4)],
+    'D': [('H',2)],
+    'E': [('G',7)],
+    'F': [('G',9)],
+    'G': [('I',2)],
+    'H': [('I',6)],
+}
+
+h = {
+    'A': 10,
+    'B': 8,
+    'C': 7,
+    'D': 6,
+    'E': 5,
+    'F': 6,
+    'G': 3,
+    'H': 4,
+    'I': 0
+}
+
+cost, path = Astar(Graph, 'A', 'I', h)
+print("A* Cost:", cost)
+print("A* Path:", path)
